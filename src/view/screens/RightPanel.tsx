@@ -1,5 +1,8 @@
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useScanStore } from '../../stores/useScanStore';
+import shallow from "zustand/shallow";
+import { toggleScanned } from '../../actions/toggleScanned.actions';
 
 
 
@@ -40,24 +43,23 @@ const useStyles = makeStyles({
 
 export const RightPanel = () => {
     const classes = useStyles();
- 
-
-    const [typed, setTyped] = useState<string>("");
-    const [scanned, setScanned ] = useState<boolean>(false);
-
-
+    const { scanned, fetch } = useScanStore(
+      (state) => ({ scanned: state.scanned, fetch: state.fetch }),
+      shallow
+    );
+  
+    const [typed, setTyped] = useState("");
+  
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTyped(event.currentTarget.value);
-	};
-
+      setTyped(event.currentTarget.value);
+    };
+  
     const handleScan = () => {
-       
-       setScanned(!scanned)
-    }
-
-    const handleSave = () => {
-
-    }
+      fetch(`https://jsonplaceholder.typicode.com/photos/${typed}`);
+      toggleScanned();
+    };
+  
+    const handleSave = () => {};
 
     return(
         <div className={classes.panelContainer}>
@@ -75,7 +77,7 @@ export const RightPanel = () => {
             { scanned ? 
                         <>
                         <Button onClick={handleSave} className={classes.saveButton} variant="outlined">SAVE</Button>
-                        <Button onClick={handleScan} variant="outlined">RESCAN</Button>
+                        <Button onClick={toggleScanned} variant="outlined">RESCAN</Button>
                         </>
                            
                       :                               

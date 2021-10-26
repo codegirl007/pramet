@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react';
+import { useScanStore } from '../../stores/useScanStore';
 
 
 
@@ -12,17 +13,22 @@ const useStyles = makeStyles({
         width: "80%",
         maxHeight: "100%",
         aspectRatio: "4/3",
-	}
+	},
+  image: {
+        width: "100%",
+        height: "100%"
+  }
 });
+
 
 
 export const ImageDisplayer = () => {
     const classes = useStyles();
-    
+    const data = useScanStore((state) => state.data);
 
     return (
       <div className={classes.imageWrapper}>
-        
+        <img src={data.url} alt={data.id} className={classes.image}/>
       </div>
-    )
-}
+    );
+};
