@@ -1,8 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import { useScanStore } from '../../stores/useScanStore';
-
-
+import shallow from "zustand/shallow";
 
 const useStyles = makeStyles({
 	imageWrapper: {
@@ -17,6 +16,11 @@ const useStyles = makeStyles({
   image: {
         width: "100%",
         height: "100%"
+  },
+  errorMessage: {
+        color: 'red',
+        textTransform: 'uppercase',
+        textAlign: 'center'
   }
 });
 
@@ -24,11 +28,13 @@ const useStyles = makeStyles({
 
 export const ImageDisplayer = () => {
     const classes = useStyles();
-    const data = useScanStore((state) => state.data);
+    const {data , error} = useScanStore((state) => ({data: state.data, error: state.error}), shallow);
 
     return (
       <div className={classes.imageWrapper}>
-        <img src={data.url} alt={data.id} className={classes.image}/>
+         {error && <p className={classes.errorMessage}>{error}</p>}
+         {console.log(data)}
+         { data && <img src={data?.url} alt={`${data?.id}`} className={classes.image}/>}
       </div>
     );
 };

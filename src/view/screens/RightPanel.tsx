@@ -23,6 +23,10 @@ const useStyles = makeStyles({
         margin: "3rem",
 		padding: "0px 0px",
 		position: "relative",
+        '& label.Mui-focused': {
+            color: '#000',
+            fontSize: '1.1rem'
+        },   
     },
     input: {
         backgroundColor: "#fff",
@@ -63,7 +67,7 @@ export const RightPanel = () => {
 
     return(
         <div className={classes.panelContainer}>
-            <TextField label="...Type Part Code"
+            <TextField label="Type Part Code"
 					   variant="outlined"
 					   value={typed}
 					   onChange={onInputChange}
