@@ -1,7 +1,7 @@
 import create from "zustand";
 
 type ScanStore = {
-	data: any;
+	data: {id: number, url: string} | null;
 	scanned: boolean;
   error: string;
 	fetch: (url: string) => Promise<void>;

@@ -33,7 +33,6 @@ export const ImageDisplayer = () => {
     return (
       <div className={classes.imageWrapper}>
          {error && <p className={classes.errorMessage}>{error}</p>}
-         {console.log(data)}
          { data && <img src={data?.url} alt={`${data?.id}`} className={classes.image}/>}
       </div>
     );
