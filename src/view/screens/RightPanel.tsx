@@ -4,6 +4,7 @@ import { useScanStore } from '../../stores/useScanStore';
 import shallow from "zustand/shallow";
 import { toggleScanned } from '../../actions/toggleScanned.actions';
 import { fetchData } from '../../actions/fetchData.actions';
+import { downloadFile } from '../../actions/downloadFile.actions';
 
 const useStyles = makeStyles({
 	panelContainer: {
@@ -60,7 +61,9 @@ export const RightPanel = () => {
       useScanStore.setState({error: ""});
     };
   
-    const handleSave = () => {};
+    const handleSave = () => {
+      downloadFile(`https://jsonplaceholder.typicode.com/photos/${typed}`, `${typed}.pdf`)
+    };
 
     return(
         <div className={classes.panelContainer}>
