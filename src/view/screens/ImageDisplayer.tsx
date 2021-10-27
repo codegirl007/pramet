@@ -25,7 +25,6 @@ const useStyles = makeStyles({
 });
 
 
-
 export const ImageDisplayer = () => {
     const classes = useStyles();
     const {data , error} = useScanStore((state) => ({data: state.data, error: state.error}), shallow);

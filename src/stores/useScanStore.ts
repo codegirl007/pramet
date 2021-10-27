@@ -7,7 +7,6 @@ type ScanStore = {
 	fetch: (url: string) => Promise<void>;
 }
 
-
 export const useScanStore = create<ScanStore>((set) => ({
   data: null,
   scanned: false,

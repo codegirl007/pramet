@@ -4,8 +4,6 @@ import { useScanStore } from '../../stores/useScanStore';
 import shallow from "zustand/shallow";
 import { toggleScanned } from '../../actions/toggleScanned.actions';
 
-
-
 const useStyles = makeStyles({
 	panelContainer: {
 		backgroundColor: "#0181FD",
@@ -39,10 +37,7 @@ const useStyles = makeStyles({
             backgroundColor: "#070574",
             color: "#fff"
         }
-    }
-    
-        
-    
+    }   
 });
 
 export const RightPanel = () => {
@@ -89,7 +84,6 @@ export const RightPanel = () => {
             }  
             </div>         
         </div>
-    )
-    
+    )    
 }
 
