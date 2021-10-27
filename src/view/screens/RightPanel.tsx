@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useScanStore } from '../../stores/useScanStore';
 import shallow from "zustand/shallow";
 import { toggleScanned } from '../../actions/toggleScanned.actions';
+import { fetchData } from '../../actions/fetchData.actions';
 
 const useStyles = makeStyles({
 	panelContainer: {
@@ -42,8 +43,8 @@ const useStyles = makeStyles({
 
 export const RightPanel = () => {
     const classes = useStyles();
-    const { scanned, fetch } = useScanStore(
-      (state) => ({ scanned: state.scanned, fetch: state.fetch }),
+    const { scanned } = useScanStore(
+      (state) => ({ scanned: state.scanned }),
       shallow
     );
   
@@ -54,8 +55,9 @@ export const RightPanel = () => {
     };
   
     const handleScan = () => {
-      fetch(`https://jsonplaceholder.typicode.com/photos/${typed}`);
+      fetchData(`https://jsonplaceholder.typicode.com/photos/${typed}`);
       toggleScanned();
+      useScanStore.setState({error: ""});
     };
   
     const handleSave = () => {};

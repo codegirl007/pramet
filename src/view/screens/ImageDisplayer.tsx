@@ -20,7 +20,9 @@ const useStyles = makeStyles({
   errorMessage: {
         color: 'red',
         textTransform: 'uppercase',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: '2rem',
+        fontWeight: 'bold'
   }
 });
 
@@ -31,7 +33,7 @@ export const ImageDisplayer = () => {
 
     return (
       <div className={classes.imageWrapper}>
-         {error && <p className={classes.errorMessage}>{error}</p>}
+         { error && <p className={classes.errorMessage}>{error}</p>}
          { data && <img src={data?.url} alt={`${data?.id}`} className={classes.image}/>}
       </div>
     );
