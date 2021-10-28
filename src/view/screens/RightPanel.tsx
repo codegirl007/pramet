@@ -61,9 +61,9 @@ export const RightPanel = () => {
       toggleScanned();
       useScanStore.setState({error: ""});
     };
-  
+    console.log(data);
     const handleSave = () => {
-      data && downloadFile(data.url, `${typed}.pdf`)
+      data && downloadFile(data.url, `${typed}.jpg`)
     };
 
     return(

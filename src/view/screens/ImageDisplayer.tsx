@@ -34,7 +34,7 @@ export const ImageDisplayer = () => {
     return (
       <div className={classes.imageWrapper}>
          { error && <p className={classes.errorMessage}>{error}</p>}
-         { data && <img src={data?.url} alt={`${data?.id}`} className={classes.image}/>}
+         { data && <img src={data?.url} alt={"img" + data?.id} className={classes.image}/>}
       </div>
     );
 };
