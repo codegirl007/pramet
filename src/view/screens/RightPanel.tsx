@@ -44,25 +44,26 @@ const useStyles = makeStyles({
 
 export const RightPanel = () => {
     const classes = useStyles();
-    const { scanned } = useScanStore(
-      (state) => ({ scanned: state.scanned }),
+    const { scanned, data } = useScanStore(
+      (state) => ({ scanned: state.scanned, data: state.data }),
       shallow
-    );
-  
+    );  
     const [typed, setTyped] = useState("");
   
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setTyped(event.currentTarget.value);
     };
+
+    const fetchUrl = `https://jsonplaceholder.typicode.com/photos/${typed}`
   
     const handleScan = () => {
-      fetchData(`https://jsonplaceholder.typicode.com/photos/${typed}`);
+      fetchData(fetchUrl);
       toggleScanned();
       useScanStore.setState({error: ""});
     };
   
     const handleSave = () => {
-      downloadFile(`https://jsonplaceholder.typicode.com/photos/${typed}`, `${typed}.pdf`)
+      data && downloadFile(data.url, `${typed}.pdf`)
     };
 
     return(

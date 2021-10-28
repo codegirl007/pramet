@@ -8,11 +8,12 @@ export async function fetchData(url: string): Promise<void> {
        })
        if (!response.ok) {
            useScanStore.setState({error: `Failed to get image with status ${response.status}. Please, try to rescan.`});
-       }       
-       useScanStore.setState({data: await response.json()});
+       } 
+           
+       useScanStore.setState({data: await response.json()});       
 
    } catch (e) {
-        console.log('Network Error');
+        console.log('Network Error ', e);
         useScanStore.setState({error: "Network Error"});
    }
 }

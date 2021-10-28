@@ -1,6 +1,6 @@
 import create from "zustand";
 
-type ScanStore = {
+export type ScanStore = {
 	data: {id: number, url: string} | null;
 	scanned: boolean;
   error: string;
