@@ -2,10 +2,11 @@ import { Button, makeStyles, TextField } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
 import { useScanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { fetchData } from "../../actions/fetchDataActions";
+import { fetchData, getScannedData } from "../../actions/fetchDataActions";
 import { toggleScanned } from "../../actions/toggleScannedActions";
 import { downloadFile } from "../../actions/downloadFileActions";
 import { Constants } from "../../model/Contants";
+import { postData } from "../../actions/fetchDataActions";
 
 const useStyles = makeStyles({
   panelContainer: {
@@ -68,6 +69,10 @@ export const RightPanel = (): ReactElement => {
 
   const handleScan = (): void => {
     // fetchData(endpointFind);
+  /*  if (data) {
+      postData(data, "scan");
+    }*/
+    getScannedData('scan');
     toggleScanned();
     useScanStore.setState({ error: "" });
   };

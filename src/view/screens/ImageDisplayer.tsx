@@ -34,8 +34,6 @@ export const ImageDisplayer = (): ReactElement => {
     shallow
   );
 
-  console.log(data);
-
   return (
     <div className={classes.imageWrapper}>
       {error && <p className={classes.errorMessage}>{error}</p>}

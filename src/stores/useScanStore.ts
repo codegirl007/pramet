@@ -1,7 +1,13 @@
 import create from "zustand";
 
+export type ScanData = {
+  bb: number[]; 
+  focus: number; 
+  img_id: number
+}
+
 export type ScanStore = {
-  data: { bb: number[]; focus: number; img_id: number } | null;
+  data: ScanData | null;
   scanned: boolean;
   error: string;
 };
