@@ -2,7 +2,7 @@ import { Button, makeStyles, TextField } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
 import { useScanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { fetchData, getScannedData } from "../../actions/fetchDataActions";
+import { fetchData } from "../../actions/fetchDataActions";
 import { toggleScanned } from "../../actions/toggleScannedActions";
 import { downloadFile } from "../../actions/downloadFileActions";
 import { Constants } from "../../model/Contants";
@@ -63,16 +63,15 @@ export const RightPanel = (): ReactElement => {
   };
 
   const changePartType = (): void => {
+    useScanStore.setState({imgId: null})
     useScanStore.setState({ error: "" });
     fetchData("findbb");
   };
 
   const handleScan = (): void => {
-    // fetchData(endpointFind);
-  /*  if (data) {
+   if (data) {
       postData(data, "scan");
-    }*/
-    getScannedData('scan');
+    }
     toggleScanned();
     useScanStore.setState({ error: "" });
   };

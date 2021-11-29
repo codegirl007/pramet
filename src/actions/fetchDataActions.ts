@@ -1,5 +1,5 @@
 import { Constants } from "../model/Contants";
-import { ScanData, useScanStore } from "../stores/useScanStore";
+import { TypeData, useScanStore } from "../stores/useScanStore";
 
 export async function fetchData(param: string): Promise<void> {
   try {
@@ -19,39 +19,27 @@ export async function fetchData(param: string): Promise<void> {
   }
 }
 
-export async function postData(data: ScanData, param: string) {
+export async function postData(data: TypeData, param: string) {
   try {
     const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
       method: "POST",
-      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         bb: data.bb,
         focus: data.focus,
       }),
     });
-    console.log("response: " + response.json());
-    if (response.ok) {
-      console.log("response: " + response);
+    const responseJSON = await response.json();
+    useScanStore.setState({ imgId: responseJSON.img_id });
+    if (!response.ok) {
+      useScanStore.setState({
+        error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
+      });
     }
   } catch (e) {
     console.log("Network Error ", e);
     useScanStore.setState({ error: "Network Error" });
   }
 }
-
-export async function getScannedData( param: string) {
-  try {
-    const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
-      method: "GET",
-      mode: "cors",
-    });
-    if (response.ok) {
-      console.log("response: " + response);
-    }
-  } catch (e) {
-    console.log("Network Error ", e);
-    useScanStore.setState({ error: "Network Error" });
-  }
-}
-
-
