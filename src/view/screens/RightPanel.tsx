@@ -1,95 +1,123 @@
-import { Button, makeStyles, TextField } from '@material-ui/core';
-import React, { useState } from 'react';
-import { useScanStore } from '../../stores/useScanStore';
+import { Button, makeStyles, TextField } from "@material-ui/core";
+import React, { ReactElement, useState } from "react";
+import { useScanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { toggleScanned } from '../../actions/toggleScanned.actions';
-import { fetchData } from '../../actions/fetchData.actions';
-import { downloadFile } from '../../actions/downloadFile.actions';
+import { fetchData } from "../../actions/fetchDataActions";
+import { toggleScanned } from "../../actions/toggleScannedActions";
+import { downloadFile } from "../../actions/downloadFileActions";
 
 const useStyles = makeStyles({
-	panelContainer: {
-		backgroundColor: "#0181FD",
-        position: "absolute",
-        right: "0",
-        top:"0",
-        height: "100%",
-        width: "25%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-	},
-    textField: {
-        margin: "3rem",
-		padding: "0px 0px",
-		position: "relative",
-        '& label.Mui-focused': {
-            color: '#000',
-            fontSize: '1.1rem'
-        },   
+  panelContainer: {
+    backgroundColor: "#0181FD",
+    position: "absolute",
+    right: "0",
+    top: "0",
+    height: "100%",
+    width: "25%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  partTypeContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    whiteSpace: "nowrap",
+  },
+  textField: {
+    margin: "3rem",
+    padding: "0px 0px",
+    "& label.Mui-focused": {
+      color: "#000",
+      fontSize: "1.1rem",
     },
-    input: {
-        backgroundColor: "#fff",
-        width: "18rem"
+  },
+  input: {
+    backgroundColor: "#fff",
+    width: "18rem",
+  },
+  darkButton: {
+    color: "#fff",
+    backgroundColor: "#070574",
+    "&:hover": {
+      backgroundColor: "#070574",
+      color: "#fff",
     },
-    saveButton: {
-        color: "#fff",
-        backgroundColor: "#070574",
-        "&:hover": {
-            backgroundColor: "#070574",
-            color: "#fff"
-        }
-    }   
+  },
 });
 
-export const RightPanel = () => {
-    const classes = useStyles();
-    const { scanned, data } = useScanStore(
-      (state) => ({ scanned: state.scanned, data: state.data }),
-      shallow
-    );  
-    const [typed, setTyped] = useState("");
-  
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setTyped(event.currentTarget.value);
-    };
+export const RightPanel = (): ReactElement => {
+  const classes = useStyles();
+  const { scanned, data } = useScanStore(
+    (state) => ({ scanned: state.scanned, data: state.data }),
+    shallow
+  );
+  const [typed, setTyped] = useState("");
 
-    const fetchUrl = `https://jsonplaceholder.typicode.com/photos/${typed}`
-  
-    const handleScan = () => {
-      fetchData(fetchUrl);
-      toggleScanned();
-      useScanStore.setState({error: ""});
-    };
-    console.log(data);
-    const handleSave = () => {
-      data && downloadFile(data.url, `${typed}.jpg`)
-    };
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTyped(event.currentTarget.value);
+  };
 
-    return(
-        <div className={classes.panelContainer}>
-            <TextField label="Type Part Code"
-					   variant="outlined"
-					   value={typed}
-					   onChange={onInputChange}
-					   className={classes.textField}
-                       InputProps={{
-                        className: classes.input,
-                       }}
-                       
-                       />
-            <div>
-            { scanned ? 
-                        <>
-                        <Button onClick={handleSave} className={classes.saveButton} variant="outlined">SAVE</Button>
-                        <Button onClick={toggleScanned} variant="outlined">RESCAN</Button>
-                        </>
-                           
-                      :                               
-                        <Button onClick={handleScan} variant="outlined">SCAN</Button> 
-            }  
-            </div>         
-        </div>
-    )    
-}
+  const fetchUrl = "http://localhost:5050/findbb";
 
+  const changePartType = (): void => {
+    useScanStore.setState({ error: "" });
+    fetchData(fetchUrl);
+  };
+
+  const handleScan = (): void => {
+    fetchData(fetchUrl);
+    toggleScanned();
+    useScanStore.setState({ error: "" });
+  };
+
+  const handleSave = (): void => {
+    data && downloadFile(data.url, `${typed}.jpg`);
+  };
+
+  return (
+    <div className={classes.panelContainer}>
+      <div className={classes.partTypeContainer}>
+        <TextField
+          label="Type Part Code"
+          variant="outlined"
+          value={typed}
+          onChange={onInputChange}
+          className={classes.textField}
+          InputProps={{
+            className: classes.input,
+          }}
+        />
+        <Button
+          variant="outlined"
+          className={classes.darkButton}
+          onClick={changePartType}
+          style={{ minWidth: "18rem", fontSize: "1.2rem" }}
+        >
+          CHANGE PART TYPE
+        </Button>
+      </div>
+      <div>
+        {scanned ? (
+          <>
+            <Button
+              onClick={handleSave}
+              className={classes.darkButton}
+              variant="outlined"
+            >
+              SAVE
+            </Button>
+            <Button onClick={toggleScanned} variant="outlined">
+              RESCAN
+            </Button>
+          </>
+        ) : (
+          <Button onClick={handleScan} variant="outlined">
+            SCAN
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+};
