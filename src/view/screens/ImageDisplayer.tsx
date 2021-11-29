@@ -29,19 +29,19 @@ const useStyles = makeStyles({
 
 export const ImageDisplayer = (): ReactElement => {
   const classes = useStyles();
-  const { data, error } = useScanStore(
-    (state) => ({ data: state.data, error: state.error }),
+  const { data, error, imgId } = useScanStore(
+    (state) => ({ data: state.data, error: state.error, imgId: state.imgId }),
     shallow
   );
 
-  console.log(data);
+  const imgEndpoint = imgId ?? data?.img_id;
 
   return (
     <div className={classes.imageWrapper}>
       {error && <p className={classes.errorMessage}>{error}</p>}
       {data && (
         <img
-          src={`${Constants.SERVER_ENDPOINT}/img/${data?.img_id}`}
+          src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
           alt={"img" + data?.img_id}
           className={classes.image}
         />

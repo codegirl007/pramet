@@ -6,6 +6,7 @@ import { fetchData } from "../../actions/fetchDataActions";
 import { toggleScanned } from "../../actions/toggleScannedActions";
 import { downloadFile } from "../../actions/downloadFileActions";
 import { Constants } from "../../model/Contants";
+import { postData } from "../../actions/fetchDataActions";
 
 const useStyles = makeStyles({
   panelContainer: {
@@ -62,12 +63,15 @@ export const RightPanel = (): ReactElement => {
   };
 
   const changePartType = (): void => {
+    useScanStore.setState({imgId: null})
     useScanStore.setState({ error: "" });
     fetchData("findbb");
   };
 
   const handleScan = (): void => {
-    // fetchData(endpointFind);
+   if (data) {
+      postData(data, "scan");
+    }
     toggleScanned();
     useScanStore.setState({ error: "" });
   };
