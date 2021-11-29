@@ -1,9 +1,9 @@
 import { Constants } from "../model/Contants";
 import { useScanStore } from "../stores/useScanStore";
 
-export async function fetchData(endpoint: string): Promise<void> {
+export async function fetchData(param: string): Promise<void> {
   try {
-    const response = await fetch(`${Constants.SERVER_ENDPOINT}/findbb`, {
+    const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
       method: "GET",
       mode: "cors",
     });
