@@ -42,7 +42,7 @@ export const ImageDisplayer = (): ReactElement => {
       {data && (
         <img
           src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
-          alt={"img" + data?.img_id}
+          alt={"img" + imgEndpoint}
           className={classes.image}
         />
       )}
