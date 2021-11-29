@@ -4,19 +4,18 @@ html {
   box-sizing: border-box;
   height: 100vh;
   width: 100vw;
-  padding: 2rem;
+  padding: 3rem;
 }
 
 body {
   margin: 0;
   height: 100%;
   width: 100%;
-  font-size: 1.6rem; 
+  font-size: 1.6rem;
   position: relative;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-

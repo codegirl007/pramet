@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { useScanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
+import { Constants } from "../../model/Contants";
 
 const useStyles = makeStyles({
   imageWrapper: {
@@ -38,9 +39,13 @@ export const ImageDisplayer = (): ReactElement => {
   return (
     <div className={classes.imageWrapper}>
       {error && <p className={classes.errorMessage}>{error}</p>}
-      {/* {data?.id && (
-        <img src={data?.url} alt={"img" + data?.id} className={classes.image} />
-      )} */}
+      {data && (
+        <img
+          src={`${Constants.SERVER_ENDPOINT}/img/${data?.img_id}`}
+          alt={"img" + data?.img_id}
+          className={classes.image}
+        />
+      )}
     </div>
   );
 };

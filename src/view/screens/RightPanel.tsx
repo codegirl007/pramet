@@ -5,6 +5,7 @@ import shallow from "zustand/shallow";
 import { fetchData } from "../../actions/fetchDataActions";
 import { toggleScanned } from "../../actions/toggleScannedActions";
 import { downloadFile } from "../../actions/downloadFileActions";
+import { Constants } from "../../model/Contants";
 
 const useStyles = makeStyles({
   panelContainer: {
@@ -12,12 +13,13 @@ const useStyles = makeStyles({
     position: "absolute",
     right: "0",
     top: "0",
-    height: "100%",
-    width: "25%",
+    width: "20%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
+    aspectRatio: "1/3",
+    maxHeight: "100%",
   },
   partTypeContainer: {
     display: "flex",
@@ -59,22 +61,20 @@ export const RightPanel = (): ReactElement => {
     setTyped(event.currentTarget.value);
   };
 
-  const fetchUrl = "http://localhost:5050/findbb";
-
   const changePartType = (): void => {
     useScanStore.setState({ error: "" });
-    fetchData(fetchUrl);
+    fetchData("findbb");
   };
 
   const handleScan = (): void => {
-    fetchData(fetchUrl);
+    // fetchData(endpointFind);
     toggleScanned();
     useScanStore.setState({ error: "" });
   };
 
-  const handleSave = (): void => {
-    data && downloadFile(data.url, `${typed}.jpg`);
-  };
+  // const handleSave = (): void => {
+  //   data && downloadFile(data.url, `${typed}.jpg`);
+  // };
 
   return (
     <div className={classes.panelContainer}>
@@ -102,7 +102,7 @@ export const RightPanel = (): ReactElement => {
         {scanned ? (
           <>
             <Button
-              onClick={handleSave}
+              // onClick={handleSave}
               className={classes.darkButton}
               variant="outlined"
             >
