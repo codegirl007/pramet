@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { BottomNavigationAction, makeStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { useScanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
@@ -25,30 +25,64 @@ const useStyles = makeStyles({
     color: "red",
     textTransform: "uppercase",
     textAlign: "center",
-    fontSize: "2rem",
+    fontSize: "6rem",
     fontWeight: "bold",
+  },
+  savedDataInfo: {
+    position: "absolute",
+    bottom: "0rem",
+    height: "4rem",
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#070574",
+    color: "#fff",
+    fontSize: "2rem",
+    borderRadius: "1.5rem",
+    border: "1px solid #fff",
+    padding: "0.5rem 3rem",
+    fontWeight: "bold",
+  },
+  dataInfo: {
+    fontWeight: "normal",
+    fontStyle: "italic",
+    marginLeft: "1rem",
   },
 });
 
 export const ImageDisplayer = (): ReactElement => {
   const classes = useStyles();
-  const { data, error, imgId } = useScanStore(
-    (state) => ({ data: state.data, error: state.error, imgId: state.imgId }),
+  const { data, error, imgId, savedData } = useScanStore(
+    (state) => ({
+      data: state.data,
+      error: state.error,
+      imgId: state.imgId,
+      savedData: state.savedData,
+    }),
     shallow
   );
 
   const imgEndpoint = imgId ?? data?.img_id;
 
   return (
-    <div className={classes.imageWrapper}>
-      {error && <p className={classes.errorMessage}>{error}</p>}
-      {data && (
-        <img
-          src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
-          alt={"img" + data?.img_id}
-          className={classes.image}
-        />
-      )}
-    </div>
+    <>
+      <div className={classes.imageWrapper}>
+        {error && <p className={classes.errorMessage}>{error}</p>}
+        {data && (
+          <img
+            src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
+            alt={"img" + data?.img_id}
+            className={classes.image}
+          />
+        )}
+        {savedData && (
+          <div className={classes.savedDataInfo}>
+            Image ID:
+            <span className={classes.dataInfo}>{savedData?.img_id}</span>, Image
+            Path:
+            <span className={classes.dataInfo}>{savedData?.img_path}</span>
+          </div>
+        )}
+      </div>
+    </>
   );
 };

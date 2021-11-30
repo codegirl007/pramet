@@ -43,3 +43,28 @@ export async function postData(data: TypeData, param: string) {
     useScanStore.setState({ error: "Network Error" });
   }
 }
+
+export async function saveData(typed: string, param: string) {
+  try {
+    const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: typed,
+      }),
+    });
+    const responseJSON = await response.json();
+    console.log(responseJSON);
+    useScanStore.setState({ savedData: responseJSON });
+    if (!response.ok) {
+      useScanStore.setState({
+        error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
+      });
+    }
+  } catch (e) {
+    console.log("Network Error ", e);
+    useScanStore.setState({ error: "Network Error" });
+  }
+}

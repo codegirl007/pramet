@@ -2,11 +2,10 @@ import { Button, makeStyles, TextField } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
 import { useScanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { fetchData } from "../../actions/fetchDataActions";
 import { toggleScanned } from "../../actions/toggleScannedActions";
 import { downloadFile } from "../../actions/downloadFileActions";
 import { Constants } from "../../model/Contants";
-import { postData } from "../../actions/fetchDataActions";
+import { fetchData, postData, saveData } from "../../actions/fetchDataActions";
 
 const useStyles = makeStyles({
   panelContainer: {
@@ -25,9 +24,6 @@ const useStyles = makeStyles({
     maxHeight: "100%",
     borderRadius: "1.5rem",
     border: "1.5px solid #A8A8A8",
-    "@media (min-width: 1820px)": {
-      minWidth: "30%",
-    },
   },
   partTypeContainer: {
     display: "flex",
@@ -65,13 +61,17 @@ const useStyles = makeStyles({
 export const RightPanel = (): ReactElement => {
   const classes = useStyles();
   const { scanned, data } = useScanStore(
-    (state) => ({ scanned: state.scanned, data: state.data }),
+    (state) => ({
+      scanned: state.scanned,
+      data: state.data,
+    }),
     shallow
   );
   const [typed, setTyped] = useState("");
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTyped(event.currentTarget.value);
+    useScanStore.setState({ savedData: null });
   };
 
   const changePartType = (): void => {
@@ -88,9 +88,12 @@ export const RightPanel = (): ReactElement => {
     useScanStore.setState({ error: "" });
   };
 
-  // const handleSave = (): void => {
-  //   data && downloadFile(data.url, `${typed}.jpg`);
-  // };
+  const handleSave = (): void => {
+    if (typed) {
+      saveData(typed, "save");
+    }
+    useScanStore.setState({ error: "" });
+  };
 
   return (
     <div className={classes.panelContainer}>
@@ -118,13 +121,13 @@ export const RightPanel = (): ReactElement => {
         {scanned ? (
           <>
             <Button
-              // onClick={handleSave}
+              onClick={handleSave}
               className={classes.darkButton}
               variant="outlined"
             >
               SAVE
             </Button>
-            <Button onClick={toggleScanned} variant="outlined">
+            <Button onClick={handleScan} variant="outlined">
               RESCAN
             </Button>
           </>
