@@ -8,7 +8,8 @@ export const defaultTheme = createTheme({
         backgroundColor: "#fff",
         fontSize: "2rem",
         fontWeight: "bold",
-        margin: "3rem",
+        margin: "1rem 2rem 2rem 2rem",
+        width: "10rem",
       },
       outlined: {
         "&:hover": {

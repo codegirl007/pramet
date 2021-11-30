@@ -10,17 +10,24 @@ import { postData } from "../../actions/fetchDataActions";
 
 const useStyles = makeStyles({
   panelContainer: {
-    backgroundColor: "#0181FD",
+    background:
+      "linear-gradient(180deg, rgba(1,129,253,1) 0%, rgba(255,255,255,1) 100%)",
     position: "absolute",
     right: "0",
     top: "0",
     width: "20%",
+    minWidth: "20%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
     aspectRatio: "1/3",
     maxHeight: "100%",
+    borderRadius: "1.5rem",
+    border: "1.5px solid #A8A8A8",
+    "@media (min-width: 1820px)": {
+      minWidth: "30%",
+    },
   },
   partTypeContainer: {
     display: "flex",
@@ -48,6 +55,11 @@ const useStyles = makeStyles({
       color: "#fff",
     },
   },
+  buttons: {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "center",
+  },
 });
 
 export const RightPanel = (): ReactElement => {
@@ -63,13 +75,13 @@ export const RightPanel = (): ReactElement => {
   };
 
   const changePartType = (): void => {
-    useScanStore.setState({imgId: null})
+    useScanStore.setState({ imgId: null });
     useScanStore.setState({ error: "" });
     fetchData("findbb");
   };
 
   const handleScan = (): void => {
-   if (data) {
+    if (data) {
       postData(data, "scan");
     }
     toggleScanned();
@@ -102,7 +114,7 @@ export const RightPanel = (): ReactElement => {
           CHANGE PART TYPE
         </Button>
       </div>
-      <div>
+      <div className={classes.buttons}>
         {scanned ? (
           <>
             <Button

@@ -8,15 +8,18 @@ const useStyles = makeStyles({
   imageWrapper: {
     backgroundColor: "#E8E8E8",
     position: "absolute",
+    borderRadius: "1.5rem",
     left: "0",
     top: "0",
     width: "80%",
     maxHeight: "100%",
     aspectRatio: "4/3",
+    overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
+    objectFit: "cover",
   },
   errorMessage: {
     color: "red",
