@@ -1,5 +1,5 @@
 import { Constants } from "../model/Contants";
-import { TypeData, useScanStore } from "../stores/useScanStore";
+import { scanStore, TypeData } from "../stores/useScanStore";
 
 export async function fetchData(param: string): Promise<void> {
   try {
@@ -8,14 +8,14 @@ export async function fetchData(param: string): Promise<void> {
       mode: "cors",
     });
     if (!response.ok) {
-      useScanStore.setState({
+      scanStore.useStore.setState({
         error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
       });
     }
-    useScanStore.setState({ data: await response.json() });
+    scanStore.useStore.setState({ data: await response.json() });
   } catch (e) {
     console.log("Network Error ", e);
-    useScanStore.setState({ error: "Network Error" });
+    scanStore.useStore.setState({ error: "Network Error" });
   }
 }
 
@@ -32,15 +32,15 @@ export async function postData(data: TypeData, param: string) {
       }),
     });
     const responseJSON = await response.json();
-    useScanStore.setState({ imgId: responseJSON.img_id });
+    scanStore.useStore.setState({ imgId: responseJSON.img_id });
     if (!response.ok) {
-      useScanStore.setState({
+      scanStore.useStore.setState({
         error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
       });
     }
   } catch (e) {
     console.log("Network Error ", e);
-    useScanStore.setState({ error: "Network Error" });
+    scanStore.useStore.setState({ error: "Network Error" });
   }
 }
 
@@ -56,15 +56,14 @@ export async function saveData(typed: string, param: string) {
       }),
     });
     const responseJSON = await response.json();
-    console.log(responseJSON);
-    useScanStore.setState({ savedData: responseJSON });
+    scanStore.useStore.setState({ savedData: responseJSON });
     if (!response.ok) {
-      useScanStore.setState({
+      scanStore.useStore.setState({
         error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
       });
     }
   } catch (e) {
     console.log("Network Error ", e);
-    useScanStore.setState({ error: "Network Error" });
+    scanStore.useStore.setState({ error: "Network Error" });
   }
 }

@@ -1,6 +1,6 @@
-import { BottomNavigationAction, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { useScanStore } from "../../stores/useScanStore";
+import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
 import { Constants } from "../../model/Contants";
 
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
 
 export const ImageDisplayer = (): ReactElement => {
   const classes = useStyles();
-  const { data, error, imgId, savedData } = useScanStore(
+  const { data, error, imgId, savedData } = scanStore.useStore(
     (state) => ({
       data: state.data,
       error: state.error,

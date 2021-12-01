@@ -1,10 +1,8 @@
 import { Button, makeStyles, TextField } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
-import { useScanStore } from "../../stores/useScanStore";
+import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { toggleScanned } from "../../actions/toggleScannedActions";
 import { downloadFile } from "../../actions/downloadFileActions";
-import { Constants } from "../../model/Contants";
 import { fetchData, postData, saveData } from "../../actions/fetchDataActions";
 
 const useStyles = makeStyles({
@@ -60,23 +58,25 @@ const useStyles = makeStyles({
 
 export const RightPanel = (): ReactElement => {
   const classes = useStyles();
-  const { scanned, data } = useScanStore(
-    (state) => ({
-      scanned: state.scanned,
-      data: state.data,
+  const { rescanButtonVisible, data } = scanStore.useStore(
+    (store) => ({
+      rescanButtonVisible: store.rescanButtonVisible,
+      data: store.data,
     }),
     shallow
   );
+
   const [typed, setTyped] = useState("");
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTyped(event.currentTarget.value);
-    useScanStore.setState({ savedData: null });
+    scanStore.useStore.setState({ savedData: null });
   };
 
   const changePartType = (): void => {
-    useScanStore.setState({ imgId: null });
-    useScanStore.setState({ error: "" });
+    scanStore.resetImageToNull();
+    scanStore.resetError();
+    scanStore.hideRescanButton();
     fetchData("findbb");
   };
 
@@ -84,15 +84,16 @@ export const RightPanel = (): ReactElement => {
     if (data) {
       postData(data, "scan");
     }
-    toggleScanned();
-    useScanStore.setState({ error: "" });
+    scanStore.showRescanButton();
+    scanStore.resetError();
   };
 
   const handleSave = (): void => {
     if (typed) {
       saveData(typed, "save");
     }
-    useScanStore.setState({ error: "" });
+    scanStore.resetError();
+    downloadFile(`${data?.img_id}`, `${data?.img_id}`);
   };
 
   return (
@@ -118,7 +119,7 @@ export const RightPanel = (): ReactElement => {
         </Button>
       </div>
       <div className={classes.buttons}>
-        {scanned ? (
+        {rescanButtonVisible ? (
           <>
             <Button
               onClick={handleSave}
