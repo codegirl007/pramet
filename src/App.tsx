@@ -3,6 +3,7 @@ import { makeStyles, ThemeProvider } from "@material-ui/core";
 import { ImageDisplayer } from "./view/screens/ImageDisplayer";
 import { RightPanel } from "./view/screens/RightPanel";
 import { defaultTheme } from "./view/themes/defaultTheme";
+import { LoginScreen } from "./view/screens/LoginScreen";
 
 const useStyles = makeStyles({
   heading: {
@@ -17,8 +18,9 @@ export const App = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <h1 className={classes.heading}>Pramet App</h1>
-      <ImageDisplayer />
-      <RightPanel />
+     {/* <ImageDisplayer />
+      <RightPanel /> */}
+      <LoginScreen />
     </ThemeProvider>
   );
 };
