@@ -30,7 +30,8 @@ const useStyles = makeStyles({
   },
   savedDataInfo: {
     position: "absolute",
-    bottom: "0rem",
+    bottom: "0.5rem",
+    left: "0.5rem",
     height: "4rem",
     display: "flex",
     alignItems: "center",
