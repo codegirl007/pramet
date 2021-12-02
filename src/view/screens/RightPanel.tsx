@@ -2,7 +2,6 @@ import { Button, makeStyles, TextField } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
 import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { downloadFile } from "../../actions/downloadFileActions";
 import { fetchData, postData, saveData } from "../../actions/fetchDataActions";
 
 const useStyles = makeStyles({
@@ -84,8 +83,8 @@ export const RightPanel = (): ReactElement => {
     if (data) {
       postData(data, "scan");
     }
-    scanStore.showRescanButton();
     scanStore.resetError();
+    scanStore.showRescanButton();
   };
 
   const handleSave = (): void => {
@@ -93,7 +92,7 @@ export const RightPanel = (): ReactElement => {
       saveData(typed, "save");
     }
     scanStore.resetError();
-    downloadFile(`${data?.img_id}`, `${data?.img_id}`);
+    scanStore.hideRescanButton();
   };
 
   return (
