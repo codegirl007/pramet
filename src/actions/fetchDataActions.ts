@@ -5,7 +5,6 @@ export async function fetchData(param: string): Promise<void> {
   try {
     const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
       method: "GET",
-      mode: "cors",
     });
     if (!response.ok) {
       scanStore.useStore.setState({
