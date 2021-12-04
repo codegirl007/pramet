@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
 import { Constants } from "../../model/Contants";
@@ -61,18 +61,37 @@ export const ImageDisplayer = (): ReactElement => {
     }),
     shallow
   );
+  //* zoom on mouse pointer with mouse wheel *//
+  const [pos, setPos] = useState({ x: 0, y: 0, scale: 1 });
+
+  const onScroll = (e: any) => {
+    const delta = e.deltaY * -0.0005;
+    const newScale = pos.scale + delta;
+
+    const ratio = 1 - newScale / pos.scale;
+
+    setPos({
+      scale: newScale,
+      x: pos.x + (e.clientX - pos.x) * ratio,
+      y: pos.y + (e.clientY - pos.y) * ratio,
+    });
+  };
 
   const imgEndpoint = imgId ?? data?.img_id;
 
   return (
     <>
-      <div className={classes.imageWrapper}>
+      <div className={classes.imageWrapper} onWheelCapture={onScroll}>
         {error && <p className={classes.errorMessage}>{error}</p>}
         {data && (
           <img
             src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
             alt={"img" + data?.img_id}
             className={classes.image}
+            style={{
+              transformOrigin: "0 0",
+              transform: `translate(${pos.x}px, ${pos.y}px) scale(${pos.scale})`,
+            }}
           />
         )}
         {savedData && (
