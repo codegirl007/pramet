@@ -1,10 +1,17 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
+import shallow from "zustand/shallow";
+import { authStore } from "../stores/authStore";
+import { LoginScreen } from "./screens/LoginScreen";
 
 type Props = {
   children: ReactElement;
 };
 
 export const Auth = (props: Props): ReactElement => {
-    
-  return <div></div>;
+  const userAuthorized = authStore.useStore(
+    (store) => store.userAuthorized,
+    shallow
+  );
+
+  return !userAuthorized ? <LoginScreen /> : props.children;
 };

@@ -10,6 +10,9 @@ import { darken } from "@material-ui/core/styles/colorManipulator";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { useForm } from "react-hook-form";
+import { authStore } from "../../stores/authStore";
+import { Deferred } from "../Deferred";
+import { login } from "../../actions/authActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +70,7 @@ type LoginForm = {
   remember: boolean;
 };
 
+
 export const LoginScreen = (): ReactElement => {
   const classes = useStyles();
 
@@ -85,7 +89,15 @@ export const LoginScreen = (): ReactElement => {
   });
 
   const onLogin = (data: LoginForm) => {
-    console.log("jsi přihlášený");
+    const deferred = new Deferred<void>();
+    login(data.username, data.password, data.remember)
+      .then(() => {
+        deferred.resolve();
+      })
+      .catch((error) => {
+        deferred.reject();
+      });
+    return deferred.promise;
   };
 
   return (
