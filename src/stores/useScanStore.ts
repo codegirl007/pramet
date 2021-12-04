@@ -17,6 +17,7 @@ export type ScanStore = {
   rescanButtonVisible: boolean;
   error: string;
   imgId: number | null;
+  loaded: boolean;
 };
 
 export const useStore = create<ScanStore>((set) => ({
@@ -25,6 +26,7 @@ export const useStore = create<ScanStore>((set) => ({
   error: "",
   imgId: null,
   savedData: null,
+  loaded: false,
 }));
 
 export const scanStore = {
@@ -39,6 +41,12 @@ export const scanStore = {
   },
   resetImageToNull: (): void => {
     useStore.setState({ imgId: null });
+  },
+  setLoading: (): void => {
+    useStore.setState({ loaded: true });
+  },
+  stopLoading: (): void => {
+    useStore.setState({ loaded: false });
   },
   useStore,
 };

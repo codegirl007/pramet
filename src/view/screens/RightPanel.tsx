@@ -65,7 +65,7 @@ export const RightPanel = (): ReactElement => {
     shallow
   );
 
-  const [typed, setTyped] = useState("");
+  const [typed, setTyped] = useState<string>("");
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTyped(event.currentTarget.value);
@@ -76,10 +76,12 @@ export const RightPanel = (): ReactElement => {
     scanStore.resetImageToNull();
     scanStore.resetError();
     scanStore.hideRescanButton();
+    scanStore.setLoading();
     fetchData("findbb");
   };
 
   const handleScan = (): void => {
+    scanStore.setLoading();
     if (data) {
       postData(data, "scan");
     }

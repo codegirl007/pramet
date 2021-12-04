@@ -14,11 +14,14 @@ const useStyles = makeStyles({
 
 export const App = () => {
   const classes = useStyles();
+
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <h1 className={classes.heading}>Pramet App</h1>
-      <ImageDisplayer />
-      <RightPanel />
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={defaultTheme}>
+        <h1 className={classes.heading}>Pramet App</h1>
+        <ImageDisplayer />
+        <RightPanel />
+      </ThemeProvider>
+    </>
   );
 };

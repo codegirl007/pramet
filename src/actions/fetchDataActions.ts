@@ -10,11 +10,14 @@ export async function fetchData(param: string): Promise<void> {
       scanStore.useStore.setState({
         error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
       });
+      scanStore.stopLoading();
     }
     scanStore.useStore.setState({ data: await response.json() });
+    scanStore.stopLoading();
   } catch (e) {
     console.log("Network Error ", e);
     scanStore.useStore.setState({ error: "Network Error" });
+    scanStore.stopLoading();
   }
 }
 
@@ -32,14 +35,17 @@ export async function postData(data: TypeData, param: string) {
     });
     const responseJSON = await response.json();
     scanStore.useStore.setState({ imgId: responseJSON.img_id });
+    scanStore.stopLoading();
     if (!response.ok) {
       scanStore.useStore.setState({
         error: `Failed to get image with status ${response.status}. Please, try to rescan.`,
       });
+      scanStore.stopLoading();
     }
   } catch (e) {
     console.log("Network Error ", e);
     scanStore.useStore.setState({ error: "Network Error" });
+    scanStore.stopLoading();
   }
 }
 
