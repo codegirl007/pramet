@@ -68,7 +68,7 @@ export const ImageDisplayer = (): ReactElement => {
     <>
       <div className={classes.imageWrapper}>
         {error && <p className={classes.errorMessage}>{error}</p>}
-        {data && (
+        {data && !error && (
           <img
             src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
             alt={"img" + data?.img_id}
