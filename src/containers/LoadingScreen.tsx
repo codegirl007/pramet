@@ -26,7 +26,6 @@ export const LoadingScreen = (): ReactElement => {
   const classes = useStyles();
 
   const loaded = scanStore.useStore((state) => state.loaded, shallow);
-  console.log(loaded);
 
   return (
     <Dialog open={loaded} onClose={() => undefined}>
