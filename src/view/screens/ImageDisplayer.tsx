@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
 import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
@@ -48,6 +48,23 @@ const useStyles = makeStyles({
     fontStyle: "italic",
     marginLeft: "1rem",
   },
+  zoomLabel: {
+    position: "absolute",
+    top: "0.5rem",
+    left: "0.5rem",
+    backgroundColor: "#070574",
+    color: "#fff",
+    padding: "0.5rem 3rem",
+    fontSize: "2rem",
+    borderRadius: "1.5rem",
+    height: "3rem",
+    Zindex: "10",
+  },
+  scaleButton: {
+    position: "absolute",
+    top: "0.5rem",
+    right: "0.5rem",
+  },
 });
 
 export const ImageDisplayer = (): ReactElement => {
@@ -62,26 +79,51 @@ export const ImageDisplayer = (): ReactElement => {
     shallow
   );
   //* zoom on mouse pointer with mouse wheel *//
-  const [pos, setPos] = useState({ x: 0, y: 0, scale: 1 });
+  type Position = {
+    x: number;
+    y: number;
+    scale: number;
+  };
+  const [position, setPosition] = useState<Position>({ x: 0, y: 0, scale: 1 });
+  const [zoomLabel, setZoomLabel] = useState<boolean>(false);
 
-  const onScroll = (e: any) => {
+  const onScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     const delta = e.deltaY * -0.0005;
-    const newScale = pos.scale + delta;
+    const newScale = position.scale + delta;
 
-    const ratio = 1 - newScale / pos.scale;
+    const ratio = 1 - newScale / position.scale;
 
-    setPos({
+    setPosition({
       scale: newScale,
-      x: pos.x + (e.clientX - pos.x) * ratio,
-      y: pos.y + (e.clientY - pos.y) * ratio,
+      x: position.x + (e.clientX - position.x) * ratio,
+      y: position.y + (e.clientY - position.y) * ratio,
     });
   };
+
+  const onShowZoomLabel = (): void => {
+    setZoomLabel(true);
+  };
+
+  const onHideZoomLabel = (): void => {
+    setZoomLabel(false);
+  };
+
+  const onSetDefaultPosition = (): void => {
+     setPosition({ x: 0, y: 0, scale: 1 }); 
+  }
+
+  const isOnDeafultPosition = position.x === 0 && position.x === 0 && position.scale === 1;
 
   const imgEndpoint = imgId ?? data?.img_id;
 
   return (
     <>
-      <div className={classes.imageWrapper} onWheelCapture={onScroll}>
+      <div
+        className={classes.imageWrapper}
+        onWheelCapture={onScroll}
+        onMouseOver={onShowZoomLabel}
+        onMouseLeave={onHideZoomLabel}
+      >
         {error && <p className={classes.errorMessage}>{error}</p>}
         {data && !error && (
           <img
@@ -90,7 +132,7 @@ export const ImageDisplayer = (): ReactElement => {
             className={classes.image}
             style={{
               transformOrigin: "0 0",
-              transform: `translate(${pos.x}px, ${pos.y}px) scale(${pos.scale})`,
+              transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
             }}
           />
         )}
@@ -101,6 +143,17 @@ export const ImageDisplayer = (): ReactElement => {
             Path:
             <span className={classes.dataInfo}>{savedData?.img_path}</span>
           </div>
+        )}
+        {!isOnDeafultPosition && (
+          <Button
+            className={classes.scaleButton}
+            onClick={onSetDefaultPosition}
+          >
+            PREV SCALE
+          </Button>
+        )}
+        {zoomLabel && (
+          <div className={classes.zoomLabel}>Try Zoom by MouseWheel</div>
         )}
       </div>
     </>
