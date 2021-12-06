@@ -1,8 +1,12 @@
 import { Button, makeStyles, TextField } from "@material-ui/core";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { fetchData, postData, saveData } from "../../actions/fetchDataActions";
+import {
+  changePartType,
+  handleSave,
+  handleScan,
+} from "../../actions/scannedSavedActions";
 
 const useStyles = makeStyles({
   panelContainer: {
@@ -57,44 +61,17 @@ const useStyles = makeStyles({
 
 export const RightPanel = (): ReactElement => {
   const classes = useStyles();
-  const { rescanButtonVisible, data } = scanStore.useStore(
+  const { rescanButtonVisible, partTypeName } = scanStore.useStore(
     (store) => ({
       rescanButtonVisible: store.rescanButtonVisible,
-      data: store.data,
+      partTypeName: store.partTypeName,
     }),
     shallow
   );
 
-  const [typed, setTyped] = useState<string>("");
-
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTyped(event.currentTarget.value);
-    scanStore.useStore.setState({ savedData: null });
-  };
-
-  const changePartType = (): void => {
-    scanStore.resetImageToNull();
-    scanStore.resetError();
-    scanStore.hideRescanButton();
-    scanStore.setLoading();
-    fetchData("findbb");
-  };
-
-  const handleScan = (): void => {
-    scanStore.setLoading();
-    if (data) {
-      postData(data, "scan");
-    }
-    scanStore.resetError();
-    scanStore.showRescanButton();
-  };
-
-  const handleSave = (): void => {
-    if (typed) {
-      saveData(typed, "save");
-    }
-    scanStore.resetError();
-    scanStore.hideRescanButton();
+    scanStore.setPartTypeName(event.currentTarget.value);
+    scanStore.useStore.setState({ savedImgData: null });
   };
 
   return (
@@ -103,7 +80,7 @@ export const RightPanel = (): ReactElement => {
         <TextField
           label="Type Part Code"
           variant="outlined"
-          value={typed}
+          value={partTypeName}
           onChange={onInputChange}
           className={classes.textField}
           InputProps={{

@@ -1,5 +1,5 @@
 import { Constants } from "../model/Contants";
-import { scanStore, TypeData } from "../stores/useScanStore";
+import { scanStore, PreviewCoordinatesData } from "../stores/useScanStore";
 
 export async function fetchData(param: string): Promise<void> {
   try {
@@ -12,7 +12,7 @@ export async function fetchData(param: string): Promise<void> {
       });
       scanStore.stopLoading();
     }
-    scanStore.useStore.setState({ data: await response.json() });
+    scanStore.useStore.setState({ previewCoordinates: await response.json() });
     scanStore.stopLoading();
   } catch (e) {
     console.log("Network Error ", e);
@@ -21,7 +21,10 @@ export async function fetchData(param: string): Promise<void> {
   }
 }
 
-export async function postData(data: TypeData, param: string) {
+export async function postData(
+  previewCoordinates: PreviewCoordinatesData,
+  param: string
+) {
   try {
     const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
       method: "POST",
@@ -29,12 +32,12 @@ export async function postData(data: TypeData, param: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        bb: data.bb,
-        focus: data.focus,
+        bb: previewCoordinates.bb,
+        focus: previewCoordinates.focus,
       }),
     });
     const responseJSON = await response.json();
-    scanStore.useStore.setState({ imgId: responseJSON.img_id });
+    scanStore.useStore.setState({ scannedImgId: responseJSON.img_id });
     scanStore.stopLoading();
     if (!response.ok) {
       scanStore.useStore.setState({
@@ -61,7 +64,7 @@ export async function saveData(typed: string, param: string) {
       }),
     });
     const responseJSON = await response.json();
-    scanStore.useStore.setState({ savedData: responseJSON });
+    scanStore.useStore.setState({ savedImgData: responseJSON });
     if (!response.ok) {
       scanStore.useStore.setState({
         error: `Failed to get image with status ${response.status}. Please, try to rescan.`,

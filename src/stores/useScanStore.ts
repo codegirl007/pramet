@@ -1,32 +1,34 @@
 import create from "zustand";
 
-export type TypeData = {
+export type PreviewCoordinatesData = {
   bb: number[];
   focus: number;
   img_id: number;
 };
 
-export type SaveData = {
+export type SavedImgData = {
   img_id: number;
   img_path: string;
 };
 
 export type ScanStore = {
-  data: TypeData | null;
-  savedData: SaveData | null;
+  previewCoordinates: PreviewCoordinatesData | null;
+  savedImgData: SavedImgData | null;
   rescanButtonVisible: boolean;
   error: string;
-  imgId: number | null;
+  scannedImgId: number | null;
   loaded: boolean;
+  partTypeName: string;
 };
 
 export const useStore = create<ScanStore>((set) => ({
-  data: null,
+  previewCoordinates: null,
   rescanButtonVisible: false,
   error: "",
-  imgId: null,
-  savedData: null,
+  scannedImgId: null,
+  savedImgData: null,
   loaded: false,
+  partTypeName: "",
 }));
 
 export const scanStore = {
@@ -39,14 +41,17 @@ export const scanStore = {
   resetError: (): void => {
     useStore.setState({ error: "" });
   },
-  resetImageToNull: (): void => {
-    useStore.setState({ imgId: null });
+  resetScannedImgToNull: (): void => {
+    useStore.setState({ scannedImgId: null });
   },
-  setLoading: (): void => {
+  startLoading: (): void => {
     useStore.setState({ loaded: true });
   },
   stopLoading: (): void => {
     useStore.setState({ loaded: false });
+  },
+  setPartTypeName: (newPartTypeName: string): void => {
+    useStore.setState({ partTypeName: newPartTypeName });
   },
   useStore,
 };

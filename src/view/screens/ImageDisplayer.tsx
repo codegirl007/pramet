@@ -1,8 +1,10 @@
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, Icon, makeStyles } from "@material-ui/core";
 import React, { ReactElement, useState } from "react";
 import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
 import { Constants } from "../../model/Contants";
+import { ZoomIn } from "@material-ui/icons";
+import { zoomStore } from "../../stores/useZoomStore";
 
 const useStyles = makeStyles({
   imageWrapper: {
@@ -54,38 +56,63 @@ const useStyles = makeStyles({
     left: "0.5rem",
     backgroundColor: "#070574",
     color: "#fff",
-    padding: "0.5rem 3rem",
+    padding: "0.5rem 2.5rem",
     fontSize: "2rem",
     borderRadius: "1.5rem",
-    height: "3rem",
     Zindex: "10",
+    display: "flex",
+    alignItems: "center",
   },
   scaleButton: {
     position: "absolute",
     top: "0.5rem",
     right: "0.5rem",
+    width: "14rem",
+    fontSize: "1.5rem",
+  },
+  zoomIcon: {
+    transform: "scale(3)",
+    margin: "1rem 2rem 1rem 0rem",
   },
 });
 
 export const ImageDisplayer = (): ReactElement => {
   const classes = useStyles();
-  const { data, error, imgId, savedData } = scanStore.useStore(
-    (state) => ({
-      data: state.data,
-      error: state.error,
-      imgId: state.imgId,
-      savedData: state.savedData,
-    }),
+  const { previewCoordinates, error, scannedImgId, savedImgData } =
+    scanStore.useStore(
+      (state) => ({
+        previewCoordinates: state.previewCoordinates,
+        error: state.error,
+        scannedImgId: state.scannedImgId,
+        savedImgData: state.savedImgData,
+      }),
+      shallow
+    );
+  const zoomLabelVisible = zoomStore.useStore(
+    (state) => state.zoomLabelVisible,
     shallow
   );
-  //* zoom on mouse pointer with mouse wheel *//
+
+  const onShowZoomLabel = (): void => {
+    zoomStore.showZoomLabel();
+  };
+
+  const onHideZoomLabel = (): void => {
+    zoomStore.hideZoomLabel();
+  };
+
+  const IMG_ENDPOINT: number | undefined =
+    scannedImgId ?? previewCoordinates?.img_id;
+
+  //------------------------------------------------------------------------------
+  // ZOOM ON MOUSEPOINTER BY MOUSE WHEEL
+  //------------------------------------------------------------------------------
   type Position = {
     x: number;
     y: number;
     scale: number;
   };
   const [position, setPosition] = useState<Position>({ x: 0, y: 0, scale: 1 });
-  const [zoomLabel, setZoomLabel] = useState<boolean>(false);
 
   const onScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     const delta = e.deltaY * -0.0005;
@@ -100,21 +127,12 @@ export const ImageDisplayer = (): ReactElement => {
     });
   };
 
-  const onShowZoomLabel = (): void => {
-    setZoomLabel(true);
-  };
-
-  const onHideZoomLabel = (): void => {
-    setZoomLabel(false);
-  };
-
   const onSetDefaultPosition = (): void => {
-     setPosition({ x: 0, y: 0, scale: 1 }); 
-  }
+    setPosition({ x: 0, y: 0, scale: 1 });
+  };
 
-  const isOnDeafultPosition = position.x === 0 && position.x === 0 && position.scale === 1;
-
-  const imgEndpoint = imgId ?? data?.img_id;
+  const isOnDeafultPosition =
+    position.x === 0 && position.x === 0 && position.scale === 1;
 
   return (
     <>
@@ -125,10 +143,10 @@ export const ImageDisplayer = (): ReactElement => {
         onMouseLeave={onHideZoomLabel}
       >
         {error && <p className={classes.errorMessage}>{error}</p>}
-        {data && !error && (
+        {previewCoordinates && !error && (
           <img
-            src={`${Constants.SERVER_ENDPOINT}/img/${imgEndpoint}`}
-            alt={"img" + imgEndpoint}
+            src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}`}
+            alt={"img" + IMG_ENDPOINT}
             className={classes.image}
             style={{
               transformOrigin: "0 0",
@@ -136,12 +154,12 @@ export const ImageDisplayer = (): ReactElement => {
             }}
           />
         )}
-        {savedData && (
+        {savedImgData && (
           <div className={classes.savedDataInfo}>
             Image ID:
-            <span className={classes.dataInfo}>{savedData?.img_id}</span>, Image
-            Path:
-            <span className={classes.dataInfo}>{savedData?.img_path}</span>
+            <span className={classes.dataInfo}>{savedImgData?.img_id}</span>,
+            Image Path:
+            <span className={classes.dataInfo}>{savedImgData?.img_path}</span>
           </div>
         )}
         {!isOnDeafultPosition && (
@@ -152,8 +170,13 @@ export const ImageDisplayer = (): ReactElement => {
             PREV SCALE
           </Button>
         )}
-        {zoomLabel && (
-          <div className={classes.zoomLabel}>Try Zoom by MouseWheel</div>
+        {zoomLabelVisible && (
+          <div className={classes.zoomLabel}>
+            <Icon className={classes.zoomIcon}>
+              <ZoomIn />
+            </Icon>
+            Try Zoom by MouseWheel
+          </div>
         )}
       </div>
     </>
