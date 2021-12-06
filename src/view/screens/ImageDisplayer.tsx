@@ -5,6 +5,7 @@ import shallow from "zustand/shallow";
 import { Constants } from "../../model/Contants";
 import { ZoomIn } from "@material-ui/icons";
 import { zoomStore } from "../../stores/useZoomStore";
+import Draggable from "react-draggable";
 
 const useStyles = makeStyles({
   imageWrapper: {
@@ -145,15 +146,19 @@ export const ImageDisplayer = (): ReactElement => {
       >
         {error && <p className={classes.errorMessage}>{error}</p>}
         {previewCoordinates && !error && (
-          <img
-            src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
-            alt={"img" + IMG_ENDPOINT}
-            className={classes.image}
-            style={{
-              transformOrigin: "0 0",
-              transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
-            }}
-          />
+          <Draggable>
+            <div>
+              <img
+                src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
+                alt={"img" + IMG_ENDPOINT}
+                className={classes.image}
+                style={{
+                  transformOrigin: "0 0",
+                  transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
+                }}
+              />
+            </div>
+          </Draggable>
         )}
         {savedImgData && (
           <div className={classes.savedDataInfo}>
