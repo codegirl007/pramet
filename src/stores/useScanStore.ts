@@ -19,6 +19,7 @@ export type ScanStore = {
   scannedImgId: number | null;
   loaded: boolean;
   partTypeName: string;
+  hash: string;
 };
 
 export const useStore = create<ScanStore>((set) => ({
@@ -29,6 +30,7 @@ export const useStore = create<ScanStore>((set) => ({
   savedImgData: null,
   loaded: false,
   partTypeName: "",
+  hash: "",
 }));
 
 export const scanStore = {
@@ -52,6 +54,9 @@ export const scanStore = {
   },
   setPartTypeName: (newPartTypeName: string): void => {
     useStore.setState({ partTypeName: newPartTypeName });
+  },
+  setHash: (newHash: string): void => {
+    useStore.setState({ hash: newHash });
   },
   useStore,
 };

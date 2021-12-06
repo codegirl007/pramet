@@ -4,7 +4,7 @@ export const Timer = (): ReactElement => {
   const [seconds, setSeconds] = useState<number>(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval: ReturnType<typeof setInterval> = setInterval(() => {
       setSeconds((second) => second + 1);
     }, 1000);
     return () => clearInterval(interval);

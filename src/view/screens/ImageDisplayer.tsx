@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   image: {
     width: "100%",
     height: "100%",
-    objectFit: "cover",
+    objectFit: "contain",
   },
   errorMessage: {
     color: "red",
@@ -78,13 +78,14 @@ const useStyles = makeStyles({
 
 export const ImageDisplayer = (): ReactElement => {
   const classes = useStyles();
-  const { previewCoordinates, error, scannedImgId, savedImgData } =
+  const { previewCoordinates, error, scannedImgId, savedImgData, hash } =
     scanStore.useStore(
       (state) => ({
         previewCoordinates: state.previewCoordinates,
         error: state.error,
         scannedImgId: state.scannedImgId,
         savedImgData: state.savedImgData,
+        hash: state.hash,
       }),
       shallow
     );
@@ -145,7 +146,7 @@ export const ImageDisplayer = (): ReactElement => {
         {error && <p className={classes.errorMessage}>{error}</p>}
         {previewCoordinates && !error && (
           <img
-            src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}`}
+            src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
             alt={"img" + IMG_ENDPOINT}
             className={classes.image}
             style={{

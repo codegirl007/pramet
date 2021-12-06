@@ -37,7 +37,11 @@ export async function postData(
       }),
     });
     const responseJSON = await response.json();
-    scanStore.useStore.setState({ scannedImgId: responseJSON.img_id });
+    const newHash = new Date().valueOf().toString();
+    scanStore.useStore.setState({
+      scannedImgId: responseJSON.img_id,
+      hash: newHash,
+    });
     scanStore.stopLoading();
     if (!response.ok) {
       scanStore.useStore.setState({
