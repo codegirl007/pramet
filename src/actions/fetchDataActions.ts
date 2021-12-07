@@ -12,7 +12,11 @@ export async function fetchData(param: string): Promise<void> {
       });
       scanStore.stopLoading();
     }
-    scanStore.useStore.setState({ previewCoordinates: await response.json() });
+    const newHash = new Date().valueOf().toString();
+    scanStore.useStore.setState({
+      previewCoordinates: await response.json(),
+      hash: newHash,
+    });
     scanStore.stopLoading();
   } catch (e) {
     console.log("Network Error ", e);
