@@ -113,9 +113,10 @@ export const ImageDisplayer = (): ReactElement => {
   
   const position = zoomStore.useStore((store) => store.position, shallow);
 
+  /*
   const onSetDefaultPosition = (): void => {
     zoomStore.onSetDefaultPosition();
-  };
+  };*/
 
   const setPosition = (newPosition: Position): void => {
     zoomStore.setPosition(newPosition);
@@ -127,15 +128,6 @@ export const ImageDisplayer = (): ReactElement => {
 
     const ratio = 1 - newScale / position.scale;
 
-  type DragPosition = {
-    x: number;
-    y: number;
-  };
-
-  const onSetDefaultPosition = (): void => {
-    setPosition({ x: 0, y: 0, scale: 1 });
-    setDragPosition({ x: 0, y: 0 });
-
     if (previewCoordinates) {
       setPosition({
         scale: newScale,
@@ -145,6 +137,17 @@ export const ImageDisplayer = (): ReactElement => {
     }
 
   };
+
+
+  type DragPosition = {
+    x: number;
+    y: number;
+  };
+
+  const onSetDefaultPosition = (): void => {
+    setPosition({ x: 0, y: 0, scale: 1 });
+    setDragPosition({ x: 0, y: 0 });
+  }  
 
   const isOnDeafultPosition =
     position.x === 0 && position.x === 0 && position.scale === 1;
