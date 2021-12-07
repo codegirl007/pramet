@@ -4,7 +4,9 @@ import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
 import { Constants } from "../../model/Contants";
 import { ZoomIn } from "@material-ui/icons";
+import Draggable from "react-draggable";
 import { zoomStore, Position } from "../../stores/useZoomStore";
+
 
 const useStyles = makeStyles({
   imageWrapper: {
@@ -124,6 +126,16 @@ export const ImageDisplayer = (): ReactElement => {
     const newScale = position.scale + delta;
 
     const ratio = 1 - newScale / position.scale;
+
+  type DragPosition = {
+    x: number;
+    y: number;
+  };
+
+  const onSetDefaultPosition = (): void => {
+    setPosition({ x: 0, y: 0, scale: 1 });
+    setDragPosition({ x: 0, y: 0 });
+
     if (previewCoordinates) {
       setPosition({
         scale: newScale,
@@ -131,10 +143,17 @@ export const ImageDisplayer = (): ReactElement => {
         y: position.y + (e.clientY - position.y) * ratio,
       });
     }
+
   };
 
   const isOnDeafultPosition =
     position.x === 0 && position.x === 0 && position.scale === 1;
+
+  const [dragPosition, setDragPosition] = useState<DragPosition | undefined>(undefined);
+
+  const handleStart = () => {
+    setDragPosition(undefined);
+  }
 
   return (
     <>
@@ -146,15 +165,24 @@ export const ImageDisplayer = (): ReactElement => {
       >
         {error && <p className={classes.errorMessage}>{error}</p>}
         {previewCoordinates && !error && (
-          <img
-            src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
-            alt={"img" + IMG_ENDPOINT}
-            className={classes.image}
-            style={{
-              transformOrigin: "0 0",
-              transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
-            }}
-          />
+          <Draggable
+            position={dragPosition}
+            defaultPosition={{ x: 0, y: 0 }}
+            onStart={handleStart}
+            onStop={handleStart}
+          >
+            <div>
+              <img
+                src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
+                alt={"img" + IMG_ENDPOINT}
+                className={classes.image}
+                style={{
+                  transformOrigin: "0 0",
+                  transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
+                }}
+              />
+            </div>
+          </Draggable>
         )}
         {savedImgData && (
           <div className={classes.savedDataInfo}>
