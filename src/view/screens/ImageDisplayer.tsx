@@ -7,7 +7,6 @@ import { ZoomIn } from "@material-ui/icons";
 import Draggable from "react-draggable";
 import { zoomStore, Position } from "../../stores/useZoomStore";
 
-
 const useStyles = makeStyles({
   imageWrapper: {
     backgroundColor: "#E8E8E8",
@@ -19,6 +18,10 @@ const useStyles = makeStyles({
     maxHeight: "100%",
     aspectRatio: "4/3",
     overflow: "hidden",
+  },
+  imageDiv: {
+    width: "100%",
+    height: "100%",
   },
   image: {
     width: "100%",
@@ -110,7 +113,7 @@ export const ImageDisplayer = (): ReactElement => {
   //------------------------------------------------------------------------------
   // ZOOM ON MOUSEPOINTER BY MOUSE WHEEL
   //------------------------------------------------------------------------------
-  
+
   const position = zoomStore.useStore((store) => store.position, shallow);
 
   /*
@@ -135,9 +138,7 @@ export const ImageDisplayer = (): ReactElement => {
         y: position.y + (e.clientY - position.y) * ratio,
       });
     }
-
   };
-
 
   type DragPosition = {
     x: number;
@@ -147,16 +148,18 @@ export const ImageDisplayer = (): ReactElement => {
   const onSetDefaultPosition = (): void => {
     setPosition({ x: 0, y: 0, scale: 1 });
     setDragPosition({ x: 0, y: 0 });
-  }  
+  };
 
   const isOnDeafultPosition =
     position.x === 0 && position.x === 0 && position.scale === 1;
 
-  const [dragPosition, setDragPosition] = useState<DragPosition | undefined>(undefined);
+  const [dragPosition, setDragPosition] = useState<DragPosition | undefined>(
+    undefined
+  );
 
   const handleStart = () => {
     setDragPosition(undefined);
-  }
+  };
 
   return (
     <>
@@ -174,7 +177,7 @@ export const ImageDisplayer = (): ReactElement => {
             onStart={handleStart}
             onStop={handleStart}
           >
-            <div>
+            <div className={classes.imageDiv}>
               <img
                 src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
                 alt={"img" + IMG_ENDPOINT}
