@@ -1,11 +1,14 @@
 import { scanStore } from "../stores/useScanStore";
+import { zoomStore } from "../stores/useZoomStore";
 import { fetchData, postData, saveData } from "./fetchDataActions";
+
 
 export const changePartType = (): void => {
   scanStore.resetScannedImgToNull();
   scanStore.resetError();
   scanStore.hideRescanButton();
   scanStore.startLoading();
+  zoomStore.onSetDefaultPosition();
   fetchData("findbb");
 };
 
