@@ -129,12 +129,24 @@ export const ImageDisplayer = (): ReactElement => {
     });
   };
 
+  type DragPosition = {
+    x: number;
+    y: number;
+  };
+
   const onSetDefaultPosition = (): void => {
     setPosition({ x: 0, y: 0, scale: 1 });
+    setDragPosition({ x: 0, y: 0 });
   };
 
   const isOnDeafultPosition =
     position.x === 0 && position.x === 0 && position.scale === 1;
+
+  const [dragPosition, setDragPosition] = useState<DragPosition | undefined>(undefined);
+
+  const handleStart = () => {
+    setDragPosition(undefined);
+  }
 
   return (
     <>
@@ -146,7 +158,12 @@ export const ImageDisplayer = (): ReactElement => {
       >
         {error && <p className={classes.errorMessage}>{error}</p>}
         {previewCoordinates && !error && (
-          <Draggable>
+          <Draggable
+            position={dragPosition}
+            defaultPosition={{ x: 0, y: 0 }}
+            onStart={handleStart}
+            onStop={handleStart}
+          >
             <div>
               <img
                 src={`${Constants.SERVER_ENDPOINT}/img/${IMG_ENDPOINT}?a=${hash}`}
