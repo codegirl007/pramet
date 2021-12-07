@@ -4,8 +4,9 @@ import { scanStore } from "../../stores/useScanStore";
 import shallow from "zustand/shallow";
 import { Constants } from "../../model/Contants";
 import { ZoomIn } from "@material-ui/icons";
-import { zoomStore } from "../../stores/useZoomStore";
 import Draggable from "react-draggable";
+import { zoomStore, Position } from "../../stores/useZoomStore";
+
 
 const useStyles = makeStyles({
   imageWrapper: {
@@ -109,25 +110,22 @@ export const ImageDisplayer = (): ReactElement => {
   //------------------------------------------------------------------------------
   // ZOOM ON MOUSEPOINTER BY MOUSE WHEEL
   //------------------------------------------------------------------------------
-  type Position = {
-    x: number;
-    y: number;
-    scale: number;
+  
+  const position = zoomStore.useStore((store) => store.position, shallow);
+
+  const onSetDefaultPosition = (): void => {
+    zoomStore.onSetDefaultPosition();
   };
-  const [position, setPosition] = useState<Position>({ x: 0, y: 0, scale: 1 });
+
+  const setPosition = (newPosition: Position): void => {
+    zoomStore.setPosition(newPosition);
+  };
 
   const onScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     const delta = e.deltaY * -0.0005;
     const newScale = position.scale + delta;
 
     const ratio = 1 - newScale / position.scale;
-
-    setPosition({
-      scale: newScale,
-      x: position.x + (e.clientX - position.x) * ratio,
-      y: position.y + (e.clientY - position.y) * ratio,
-    });
-  };
 
   type DragPosition = {
     x: number;
@@ -137,6 +135,15 @@ export const ImageDisplayer = (): ReactElement => {
   const onSetDefaultPosition = (): void => {
     setPosition({ x: 0, y: 0, scale: 1 });
     setDragPosition({ x: 0, y: 0 });
+
+    if (previewCoordinates) {
+      setPosition({
+        scale: newScale,
+        x: position.x + (e.clientX - position.x) * ratio,
+        y: position.y + (e.clientY - position.y) * ratio,
+      });
+    }
+
   };
 
   const isOnDeafultPosition =
@@ -185,7 +192,7 @@ export const ImageDisplayer = (): ReactElement => {
             <span className={classes.dataInfo}>{savedImgData?.img_path}</span>
           </div>
         )}
-        {!isOnDeafultPosition && (
+        {!isOnDeafultPosition && previewCoordinates && (
           <Button
             className={classes.scaleButton}
             onClick={onSetDefaultPosition}
@@ -193,7 +200,7 @@ export const ImageDisplayer = (): ReactElement => {
             PREV SCALE
           </Button>
         )}
-        {zoomLabelVisible && (
+        {zoomLabelVisible && previewCoordinates && (
           <div className={classes.zoomLabel}>
             <Icon className={classes.zoomIcon}>
               <ZoomIn />
