@@ -120,12 +120,13 @@ export const ImageDisplayer = (): ReactElement => {
     const newScale = position.scale + delta;
 
     const ratio = 1 - newScale / position.scale;
-
-    setPosition({
-      scale: newScale,
-      x: position.x + (e.clientX - position.x) * ratio,
-      y: position.y + (e.clientY - position.y) * ratio,
-    });
+    if (previewCoordinates) {
+      setPosition({
+        scale: newScale,
+        x: position.x + (e.clientX - position.x) * ratio,
+        y: position.y + (e.clientY - position.y) * ratio,
+      });
+    }
   };
 
   const onSetDefaultPosition = (): void => {
@@ -163,7 +164,7 @@ export const ImageDisplayer = (): ReactElement => {
             <span className={classes.dataInfo}>{savedImgData?.img_path}</span>
           </div>
         )}
-        {!isOnDeafultPosition && (
+        {!isOnDeafultPosition && previewCoordinates && (
           <Button
             className={classes.scaleButton}
             onClick={onSetDefaultPosition}
@@ -171,7 +172,7 @@ export const ImageDisplayer = (): ReactElement => {
             PREV SCALE
           </Button>
         )}
-        {zoomLabelVisible && (
+        {zoomLabelVisible && previewCoordinates && (
           <div className={classes.zoomLabel}>
             <Icon className={classes.zoomIcon}>
               <ZoomIn />
