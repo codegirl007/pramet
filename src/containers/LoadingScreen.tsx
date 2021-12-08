@@ -19,6 +19,13 @@ const useStyles = makeStyles({
   },
   timer: {
     width: "15rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: "2rem",
+    margin: "1rem",
   },
 });
 
@@ -32,7 +39,8 @@ export const LoadingScreen = (): ReactElement => {
       <DialogContent className={classes.loadContent}>
         <CircularProgress />
         <p className={classes.timer}>
-          Loading Time: <Timer />
+          <div className={classes.loadingText}>Working...</div>
+          <Timer />
         </p>
       </DialogContent>
     </Dialog>

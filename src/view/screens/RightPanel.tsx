@@ -35,14 +35,18 @@ const useStyles = makeStyles({
   textField: {
     margin: "3rem",
     padding: "0px 0px",
+    "& label": {
+      fontSize: "1.8rem",
+    },
     "& label.Mui-focused": {
       color: "#000",
-      fontSize: "1.1rem",
+      fontSize: "1.8rem",
     },
   },
   input: {
     backgroundColor: "#fff",
     width: "18rem",
+    fontSize: "1.8rem",
   },
   darkButton: {
     color: "#fff",

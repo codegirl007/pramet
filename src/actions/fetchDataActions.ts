@@ -16,6 +16,7 @@ export async function fetchData(param: string): Promise<void> {
     scanStore.useStore.setState({
       previewCoordinates: await response.json(),
       hash: newHash,
+      imgVisible: true,
     });
     scanStore.stopLoading();
   } catch (e) {
@@ -45,6 +46,7 @@ export async function postData(
     scanStore.useStore.setState({
       scannedImgId: responseJSON.img_id,
       hash: newHash,
+      imgVisible: true,
     });
     scanStore.stopLoading();
     if (!response.ok) {

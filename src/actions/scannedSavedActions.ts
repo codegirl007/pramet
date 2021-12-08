@@ -2,9 +2,10 @@ import { scanStore } from "../stores/useScanStore";
 import { zoomStore } from "../stores/useZoomStore";
 import { fetchData, postData, saveData } from "./fetchDataActions";
 
-
 export const changePartType = (): void => {
+  scanStore.hideImg();
   scanStore.resetScannedImgToNull();
+  scanStore.resetSavedImgDataToNull();
   scanStore.resetError();
   scanStore.hideRescanButton();
   scanStore.startLoading();
@@ -13,6 +14,7 @@ export const changePartType = (): void => {
 };
 
 export const handleScan = (): void => {
+  scanStore.hideImg();
   const previewCoordinates = scanStore.useStore.getState().previewCoordinates;
   scanStore.startLoading();
   if (previewCoordinates) {
@@ -20,6 +22,7 @@ export const handleScan = (): void => {
   }
   scanStore.resetError();
   scanStore.showRescanButton();
+  scanStore.resetSavedImgDataToNull();
 };
 
 export const handleSave = (): void => {

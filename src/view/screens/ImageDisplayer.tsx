@@ -83,17 +83,24 @@ const useStyles = makeStyles({
 
 export const ImageDisplayer = (): ReactElement => {
   const classes = useStyles();
-  const { previewCoordinates, error, scannedImgId, savedImgData, hash } =
-    scanStore.useStore(
-      (state) => ({
-        previewCoordinates: state.previewCoordinates,
-        error: state.error,
-        scannedImgId: state.scannedImgId,
-        savedImgData: state.savedImgData,
-        hash: state.hash,
-      }),
-      shallow
-    );
+  const {
+    previewCoordinates,
+    error,
+    scannedImgId,
+    savedImgData,
+    hash,
+    imgVisible,
+  } = scanStore.useStore(
+    (state) => ({
+      previewCoordinates: state.previewCoordinates,
+      error: state.error,
+      scannedImgId: state.scannedImgId,
+      savedImgData: state.savedImgData,
+      hash: state.hash,
+      imgVisible: state.imgVisible,
+    }),
+    shallow
+  );
   const zoomLabelVisible = zoomStore.useStore(
     (state) => state.zoomLabelVisible,
     shallow
@@ -170,7 +177,7 @@ export const ImageDisplayer = (): ReactElement => {
         onMouseLeave={onHideZoomLabel}
       >
         {error && <p className={classes.errorMessage}>{error}</p>}
-        {previewCoordinates && !error && (
+        {imgVisible && previewCoordinates && !error && imgVisible && (
           <Draggable
             position={dragPosition}
             defaultPosition={{ x: 0, y: 0 }}

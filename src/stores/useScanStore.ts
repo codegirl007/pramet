@@ -20,6 +20,7 @@ export type ScanStore = {
   loaded: boolean;
   partTypeName: string;
   hash: string;
+  imgVisible: boolean;
 };
 
 export const useStore = create<ScanStore>((set) => ({
@@ -31,9 +32,16 @@ export const useStore = create<ScanStore>((set) => ({
   loaded: false,
   partTypeName: "",
   hash: "",
+  imgVisible: false,
 }));
 
 export const scanStore = {
+  showImg: (): void => {
+    useStore.setState({ imgVisible: true });
+  },
+  hideImg: (): void => {
+    useStore.setState({ imgVisible: false });
+  },
   showRescanButton: (): void => {
     useStore.setState({ rescanButtonVisible: true });
   },
@@ -45,6 +53,9 @@ export const scanStore = {
   },
   resetScannedImgToNull: (): void => {
     useStore.setState({ scannedImgId: null });
+  },
+  resetSavedImgDataToNull: (): void => {
+    useStore.setState({ savedImgData: null });
   },
   startLoading: (): void => {
     useStore.setState({ loaded: true });
