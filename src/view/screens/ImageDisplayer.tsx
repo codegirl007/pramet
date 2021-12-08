@@ -177,7 +177,7 @@ export const ImageDisplayer = (): ReactElement => {
         onMouseLeave={onHideZoomLabel}
       >
         {error && <p className={classes.errorMessage}>{error}</p>}
-        {imgVisible && previewCoordinates && !error && imgVisible && (
+        {imgVisible && previewCoordinates && !error && (
           <Draggable
             position={dragPosition}
             defaultPosition={{ x: 0, y: 0 }}
