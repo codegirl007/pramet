@@ -1,5 +1,5 @@
+import { positionStore } from "../stores/usePositionStore";
 import { scanStore } from "../stores/useScanStore";
-import { zoomStore } from "../stores/useZoomStore";
 import { fetchData, postData, saveData } from "./fetchDataActions";
 
 export const changePartType = (): void => {
@@ -9,7 +9,7 @@ export const changePartType = (): void => {
   scanStore.resetError();
   scanStore.hideRescanButton();
   scanStore.startLoading();
-  zoomStore.onSetDefaultPosition();
+  positionStore.setDefaultPosition();
   fetchData("findbb");
 };
 

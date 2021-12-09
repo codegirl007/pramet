@@ -75,7 +75,7 @@ export const RightPanel = (): ReactElement => {
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     scanStore.setPartTypeName(event.currentTarget.value);
-    scanStore.useStore.setState({ savedImgData: null });
+    scanStore.resetSavedImgDataToNull();
   };
 
   return (
