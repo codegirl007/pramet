@@ -38,10 +38,10 @@ export const LoadingScreen = (): ReactElement => {
     <Dialog open={loaded} onClose={() => undefined}>
       <DialogContent className={classes.loadContent}>
         <CircularProgress />
-        <p className={classes.timer}>
-          <div className={classes.loadingText}>Working...</div>
+        <div className={classes.timer}>
+          <p className={classes.loadingText}>Working...</p>
           <Timer />
-        </p>
+        </div>
       </DialogContent>
     </Dialog>
   );

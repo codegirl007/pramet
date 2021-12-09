@@ -81,7 +81,7 @@ export const RightPanel = (): ReactElement => {
   };
 
   const onInputNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    scanStore.setThickness(parseInt(event.currentTarget.value));
+    scanStore.setThickness(event.currentTarget.value);
     scanStore.resetSavedImgDataToNull();
   };
   return (
