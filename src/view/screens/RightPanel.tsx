@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     whiteSpace: "nowrap",
   },
   textField: {
-    margin: "3rem",
+    margin: "2rem 1rem",
     padding: "0px 0px",
     "& label": {
       fontSize: "1.8rem",
@@ -65,19 +65,25 @@ const useStyles = makeStyles({
 
 export const RightPanel = (): ReactElement => {
   const classes = useStyles();
-  const { rescanButtonVisible, partTypeName } = scanStore.useStore(
+  const { rescanButtonVisible, partTypeName, thickness } = scanStore.useStore(
     (store) => ({
       rescanButtonVisible: store.rescanButtonVisible,
       partTypeName: store.partTypeName,
+      thickness: store.thickness,
     }),
     shallow
   );
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     scanStore.setPartTypeName(event.currentTarget.value);
     scanStore.resetSavedImgDataToNull();
+    scanStore.resetThickness();
   };
 
+  const onInputNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    scanStore.setThickness(parseInt(event.currentTarget.value));
+    scanStore.resetSavedImgDataToNull();
+  };
   return (
     <div className={classes.panelContainer}>
       <div className={classes.partTypeContainer}>
@@ -85,7 +91,17 @@ export const RightPanel = (): ReactElement => {
           label="Type Part Code"
           variant="outlined"
           value={partTypeName}
-          onChange={onInputChange}
+          onChange={onInputNameChange}
+          className={classes.textField}
+          InputProps={{
+            className: classes.input,
+          }}
+        />
+        <TextField
+          label="Thickness"
+          variant="outlined"
+          value={thickness}
+          onChange={onInputNumberChange}
           className={classes.textField}
           InputProps={{
             className: classes.input,

@@ -19,6 +19,7 @@ export type ScanStore = {
   scannedImgId: number | null;
   loaded: boolean;
   partTypeName: string;
+  thickness: number;
   hash: string;
   imgVisible: boolean;
 };
@@ -31,6 +32,7 @@ export const useStore = create<ScanStore>((set) => ({
   savedImgData: null,
   loaded: false,
   partTypeName: "",
+  thickness: 0,
   hash: "",
   imgVisible: false,
 }));
@@ -65,6 +67,12 @@ export const scanStore = {
   },
   setPartTypeName: (newPartTypeName: string): void => {
     useStore.setState({ partTypeName: newPartTypeName });
+  },
+  setThickness: (newThickness: number): void => {
+    useStore.setState({ thickness: newThickness });
+  },
+  resetThickness: (): void => {
+    useStore.setState({ thickness: 0 });
   },
   setHash: (newHash: string): void => {
     useStore.setState({ hash: newHash });

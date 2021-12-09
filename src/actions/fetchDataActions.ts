@@ -4,7 +4,13 @@ import { scanStore, PreviewCoordinatesData } from "../stores/useScanStore";
 export async function fetchData(param: string): Promise<void> {
   try {
     const response = await fetch(`${Constants.SERVER_ENDPOINT}/${param}`, {
-      method: "GET",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        thickness: scanStore.useStore.getState().thickness,
+      }),
     });
     if (!response.ok) {
       scanStore.useStore.setState({
