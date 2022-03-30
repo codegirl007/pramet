@@ -22,6 +22,10 @@ export type ScanStore = {
   thickness: string;
   hash: string;
   imgVisible: boolean;
+  firstInputError: boolean;
+  firstInputErrorMessage: string;
+  secondInputError: boolean;
+  secondInputErrorMessage: string;
 };
 
 export const useStore = create<ScanStore>((set) => ({
@@ -35,6 +39,10 @@ export const useStore = create<ScanStore>((set) => ({
   thickness: "",
   hash: "",
   imgVisible: false,
+  firstInputError: true,
+  firstInputErrorMessage: "Type part type code name",
+  secondInputError: true,
+  secondInputErrorMessage: "Type number larger than 0",
 }));
 
 export const scanStore = {
@@ -76,6 +84,22 @@ export const scanStore = {
   },
   setHash: (newHash: string): void => {
     useStore.setState({ hash: newHash });
+  },
+  showFirstInputErrorMessage: (): void => {
+    useStore.setState({ firstInputError: true });
+    useStore.setState({ firstInputErrorMessage: "Type part type code name" });
+  },
+  showSecondInputErrorMessage: (): void => {
+    useStore.setState({ secondInputError: true });
+    useStore.setState({ secondInputErrorMessage: "Type number larger than 0" });
+  },
+  hideFirstInputErrorMessage: (): void => {
+    useStore.setState({ firstInputError: false });
+     useStore.setState({ firstInputErrorMessage: "" });
+  },
+  hideSecondInputErrorMessage: (): void => {
+    useStore.setState({ secondInputError: false });
+    useStore.setState({ secondInputErrorMessage: "" });
   },
   useStore,
 };

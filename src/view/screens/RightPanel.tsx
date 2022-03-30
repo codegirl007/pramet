@@ -61,29 +61,57 @@ const useStyles = makeStyles({
     flexFlow: "row wrap",
     justifyContent: "center",
   },
+  helperText: {
+    color: "red",
+    textTransform: "uppercase",
+    fontSize: "1rem",
+  },
 });
 
 export const RightPanel = (): ReactElement => {
   const classes = useStyles();
-  const { rescanButtonVisible, partTypeName, thickness } = scanStore.useStore(
+  const {
+    rescanButtonVisible,
+    partTypeName,
+    thickness,
+    firstInputError,
+    firstInputErrorMessage,
+    secondInputError,
+    secondInputErrorMessage,
+  } = scanStore.useStore(
     (store) => ({
       rescanButtonVisible: store.rescanButtonVisible,
       partTypeName: store.partTypeName,
       thickness: store.thickness,
+      firstInputError: store.firstInputError,
+      firstInputErrorMessage: store.firstInputErrorMessage,
+      secondInputError: store.secondInputError,
+      secondInputErrorMessage: store.secondInputErrorMessage,
     }),
     shallow
   );
 
   const onInputNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    scanStore.hideFirstInputErrorMessage();
+    if (!event.currentTarget.value) {
+      scanStore.showFirstInputErrorMessage();
+    }
     scanStore.setPartTypeName(event.currentTarget.value);
     scanStore.resetSavedImgDataToNull();
     scanStore.resetThickness();
+    scanStore.showSecondInputErrorMessage();
   };
 
   const onInputNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    scanStore.hideSecondInputErrorMessage();
+    let reg = new RegExp("^[0-9]").test(event.currentTarget.value);
+    if (!reg || Number(event.currentTarget.value) <= 0) {
+      scanStore.showSecondInputErrorMessage();
+    }
     scanStore.setThickness(event.currentTarget.value);
     scanStore.resetSavedImgDataToNull();
   };
+
   return (
     <div className={classes.panelContainer}>
       <div className={classes.partTypeContainer}>
@@ -96,6 +124,11 @@ export const RightPanel = (): ReactElement => {
           InputProps={{
             className: classes.input,
           }}
+          FormHelperTextProps={{
+            className: classes.helperText,
+          }}
+          error={firstInputError}
+          helperText={firstInputErrorMessage}
         />
         <TextField
           label="Thickness"
@@ -106,15 +139,22 @@ export const RightPanel = (): ReactElement => {
           InputProps={{
             className: classes.input,
           }}
+          FormHelperTextProps={{
+            className: classes.helperText,
+          }}
+          error={secondInputError}
+          helperText={secondInputErrorMessage}
         />
-        <Button
-          variant="outlined"
-          className={classes.darkButton}
-          onClick={changePartType}
-          style={{ minWidth: "18rem", fontSize: "1.2rem" }}
-        >
-          CHANGE PART TYPE
-        </Button>
+        {!firstInputError && !secondInputError && (
+          <Button
+            variant="outlined"
+            className={classes.darkButton}
+            onClick={changePartType}
+            style={{ minWidth: "18rem", fontSize: "1.2rem" }}
+          >
+            CHANGE PART TYPE
+          </Button>
+        )}
       </div>
       <div className={classes.buttons}>
         {rescanButtonVisible ? (
