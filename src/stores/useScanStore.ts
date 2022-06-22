@@ -1,105 +1,111 @@
 import create from "zustand";
 
-export type PreviewCoordinatesData = {
-  bb: number[];
-  focus: number;
-  img_id: number;
+export type DefectsData = {
+	id: number;
+	label: string;
+	polygon: number[];
 };
 
-export type SavedImgData = {
-  img_id: number;
-  img_path: string;
+export type ScannedData = {
+	defect_confirmation: null;
+	defects: DefectsData[];
+	id: number;
+	img_path: null;
+	model_version: string;
+	number: number;
+	part_code: string;
+	series: number;
+	timestamp: string;
+};
+
+export type AutomaticScanDefectRecord = {
+	bbox: number[];
+	id: number;
+	label: string;
+	polygon: number[];
+};
+
+export type AutomaticScanRecord = {
+	defect_confirmation: null;
+	defects: AutomaticScanDefectRecord[];
+	id: number;
+	model_version: string;
+	number: number;
+	series: number;
+	timestamp: string;
+};
+
+export type AutomaticScanRecords = {
+	records: AutomaticScanRecord[];
+	total_count: number;
+};
+
+export type CalibrationData = {
+	bb: number[];
+	duration: number;
+	focus: number;
+	img_id: number;
 };
 
 export type ScanStore = {
-  previewCoordinates: PreviewCoordinatesData | null;
-  savedImgData: SavedImgData | null;
-  rescanButtonVisible: boolean;
-  error: string;
-  scannedImgId: number | null;
-  loaded: boolean;
-  partTypeName: string;
-  thickness: string;
-  hash: string;
-  imgVisible: boolean;
-  firstInputError: boolean;
-  firstInputErrorMessage: string;
-  secondInputError: boolean;
-  secondInputErrorMessage: string;
+	calibrationData: CalibrationData | null;
+	scannedData: ScannedData | null;
+	savedImgData: number | null;
+	error: string;
+	loaded: boolean;
+	loadingName: string;
+	imgVisible: boolean;
+	records: AutomaticScanRecords | null;
+	galleryImageId: number | null;
+	snackBarVisible: boolean;
 };
 
 export const useStore = create<ScanStore>((set) => ({
-  previewCoordinates: null,
-  rescanButtonVisible: false,
-  error: "",
-  scannedImgId: null,
-  savedImgData: null,
-  loaded: false,
-  partTypeName: "",
-  thickness: "",
-  hash: "",
-  imgVisible: false,
-  firstInputError: true,
-  firstInputErrorMessage: "Type part type code name",
-  secondInputError: true,
-  secondInputErrorMessage: "Type number larger than 0",
+	calibrationData: null,
+	scannedData: null,
+	error: "",
+	savedImgData: null,
+	loaded: false,
+	loadingName: "",
+	imgVisible: true,
+	records: null,
+	galleryImageId: null,
+	snackBarVisible: false,
 }));
 
 export const scanStore = {
-  showImg: (): void => {
-    useStore.setState({ imgVisible: true });
-  },
-  hideImg: (): void => {
-    useStore.setState({ imgVisible: false });
-  },
-  showRescanButton: (): void => {
-    useStore.setState({ rescanButtonVisible: true });
-  },
-  hideRescanButton: (): void => {
-    useStore.setState({ rescanButtonVisible: false });
-  },
-  resetError: (): void => {
-    useStore.setState({ error: "" });
-  },
-  resetScannedImgToNull: (): void => {
-    useStore.setState({ scannedImgId: null });
-  },
-  resetSavedImgDataToNull: (): void => {
-    useStore.setState({ savedImgData: null });
-  },
-  startLoading: (): void => {
-    useStore.setState({ loaded: true });
-  },
-  stopLoading: (): void => {
-    useStore.setState({ loaded: false });
-  },
-  setPartTypeName: (newPartTypeName: string): void => {
-    useStore.setState({ partTypeName: newPartTypeName });
-  },
-  setThickness: (newThickness: string): void => {
-    useStore.setState({ thickness: newThickness });
-  },
-  resetThickness: (): void => {
-    useStore.setState({ thickness: "" });
-  },
-  setHash: (newHash: string): void => {
-    useStore.setState({ hash: newHash });
-  },
-  showFirstInputErrorMessage: (): void => {
-    useStore.setState({ firstInputError: true });
-    useStore.setState({ firstInputErrorMessage: "Type part type code name" });
-  },
-  showSecondInputErrorMessage: (): void => {
-    useStore.setState({ secondInputError: true });
-    useStore.setState({ secondInputErrorMessage: "Type number larger than 0" });
-  },
-  hideFirstInputErrorMessage: (): void => {
-    useStore.setState({ firstInputError: false });
-     useStore.setState({ firstInputErrorMessage: "" });
-  },
-  hideSecondInputErrorMessage: (): void => {
-    useStore.setState({ secondInputError: false });
-    useStore.setState({ secondInputErrorMessage: "" });
-  },
-  useStore,
+	resetRecordsToNull: (): void => {
+		useStore.setState({ records: null });
+	},
+	resetSelectedImageToNull: (): void => {
+		useStore.setState({ galleryImageId: null });
+	},
+	selectImage: (newId: number): void => {
+		useStore.setState({ galleryImageId: newId });
+	},
+	showImg: (): void => {
+		useStore.setState({ imgVisible: true });
+	},
+	hideImg: (): void => {
+		useStore.setState({ imgVisible: false });
+	},
+	resetError: (): void => {
+		useStore.setState({ error: "" });
+	},
+	resetSavedImgDataToNull: (): void => {
+		useStore.setState({ savedImgData: null });
+	},
+	startLoading: (newLoadingName: string): void => {
+		useStore.setState({ loaded: true, loadingName: newLoadingName });
+	},
+	stopLoading: (): void => {
+		useStore.setState({ loaded: false });
+	},
+	showSnackBar: (): void => {
+		useStore.setState({ snackBarVisible: true });
+	},
+	hideSnackBar: (): void => {
+		useStore.setState({ snackBarVisible: false });
+	},
+	useStore,
 };

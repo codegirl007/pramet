@@ -1,48 +1,25 @@
 import React, { ReactElement } from "react";
-import {
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  makeStyles,
-} from "@material-ui/core";
 import { scanStore } from "../stores/useScanStore";
 import shallow from "zustand/shallow";
-import { Timer } from "./Timer";
+import { FullScreenDialog } from "./FullScreenDialog";
+import { PartialScreenDialog } from "./PartialScreenDialog";
+import { AppState } from "../App";
 
-const useStyles = makeStyles({
-  loadContent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "1rem 2rem",
-  },
-  timer: {
-    width: "15rem",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  loadingText: {
-    fontSize: "2rem",
-    margin: "1rem",
-  },
-});
+type Props = {
+	appState?: AppState;
+	handleRerender: () => void;
+};
 
-export const LoadingScreen = (): ReactElement => {
-  const classes = useStyles();
+export const LoadingScreen = (props: Props): ReactElement => {
+	const loadingName = scanStore.useStore((state) => state.loadingName, shallow);
 
-  const loaded = scanStore.useStore((state) => state.loaded, shallow);
-
-  return (
-    <Dialog open={loaded} onClose={() => undefined}>
-      <DialogContent className={classes.loadContent}>
-        <CircularProgress />
-        <div className={classes.timer}>
-          <p className={classes.loadingText}>Working...</p>
-          <Timer />
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+	return (
+		<>
+			{loadingName === "Scanning" || loadingName === "Running" || loadingName === "Stopping" ? (
+				<PartialScreenDialog appState={props.appState} handleRerender={props.handleRerender} />
+			) : (
+				<FullScreenDialog appState={props.appState} handleRerender={props.handleRerender} />
+			)}
+		</>
+	);
 };
